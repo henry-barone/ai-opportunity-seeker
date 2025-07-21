@@ -1,6 +1,14 @@
 {
   "version": 2,
+  "functions": {
+    "frontend/api/index.js": {
+      "maxDuration": 10
+    }
+  },
   "rewrites": [
-    { "source": "/(.*)", "destination": "/api" }
+    { "source": "/webhook/visualization-data", "destination": "/frontend/api" },
+    { "source": "/webhook/status", "destination": "/frontend/api" },
+    { "source": "/health", "destination": "/frontend/api" },
+    { "source": "/", "destination": "/frontend/api" }
   ]
 }
