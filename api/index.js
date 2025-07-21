@@ -155,11 +155,139 @@ function processSimplifiedSpaikData(rawData) {
   };
 }
 
+// Helper function to process pre-calculated data format
+function processPreCalculatedData(rawData) {
+  const startTime = Date.now();
+
+  // Validate required fields for pre-calculated format
+  if (typeof rawData.success !== 'boolean') {
+    throw new Error('success field is required and must be a boolean');
+  }
+
+  if (!rawData.solutionType || typeof rawData.solutionType !== 'string') {
+    throw new Error('solutionType is required and must be a string');
+  }
+
+  if (!rawData.solutionTitle || typeof rawData.solutionTitle !== 'string') {
+    throw new Error('solutionTitle is required and must be a string');
+  }
+
+  if (typeof rawData.weeklyHoursSaved !== 'number' || rawData.weeklyHoursSaved < 0) {
+    throw new Error('weeklyHoursSaved must be a non-negative number');
+  }
+
+  if (typeof rawData.yearlyCostSaved !== 'number' || rawData.yearlyCostSaved < 0) {
+    throw new Error('yearlyCostSaved must be a non-negative number');
+  }
+
+  if (typeof rawData.improvementPercentage !== 'number' || rawData.improvementPercentage < 0 || rawData.improvementPercentage > 100) {
+    throw new Error('improvementPercentage must be a number between 0 and 100');
+  }
+
+  if (!rawData.metrics || typeof rawData.metrics !== 'object') {
+    throw new Error('metrics object is required');
+  }
+
+  const id = rawData.id || generateVisualizationId();
+
+  // Create visualization data structure from pre-calculated results
+  const visualizationData = {
+    id,
+    timestamp: new Date().toISOString(),
+    userInfo: {
+      name: rawData.userName || 'SPAIK User',
+      email: rawData.userEmail || 'user@spaik.io',
+      company: rawData.company || '',
+      industry: rawData.industry || ''
+    },
+    recommendation: {
+      type: rawData.solutionType,
+      title: rawData.solutionTitle,
+      description: rawData.description || `${rawData.solutionTitle} automation solution`,
+      currentState: {
+        description: `Currently spending ${rawData.weeklyHoursSaved + (rawData.metrics.futureHours || 0)} hours per week on manual processes`,
+        painPoints: [
+          'Time-consuming manual process',
+          'High potential for human error',
+          'Inefficient resource utilization',
+          'Scalability limitations'
+        ],
+        metrics: {
+          timeSpent: rawData.weeklyHoursSaved + (rawData.metrics.futureHours || 0),
+          errorRate: 10,
+          cost: (rawData.weeklyHoursSaved + (rawData.metrics.futureHours || 0)) * 150
+        }
+      },
+      futureState: {
+        description: `Automated process reducing time to ${rawData.metrics.futureHours || 0} hours per week`,
+        benefits: [
+          'Automated processing with minimal intervention',
+          'Consistent and reliable results',
+          'Improved efficiency and accuracy',
+          'Scalable solution for business growth'
+        ],
+        metrics: {
+          timeSpent: rawData.metrics.futureHours || 0,
+          errorRate: 2,
+          cost: (rawData.metrics.futureHours || 0) * 150
+        }
+      },
+      improvement: {
+        percentage: rawData.improvementPercentage,
+        absoluteValue: rawData.weeklyHoursSaved,
+        unit: 'hours',
+        description: `Save ${rawData.weeklyHoursSaved} hours per week`
+      },
+      implementationTimeline: rawData.implementationTimeline || '2-4 weeks',
+      confidence: rawData.confidence || 0.9
+    },
+    chatHistory: rawData.chatHistory || [],
+    sessionId: rawData.sessionId || id,
+    
+    // Store original pre-calculated data
+    originalData: rawData,
+    dataFormat: 'pre-calculated',
+
+    // Use the provided metrics directly
+    calculatedMetrics: {
+      weeklySavings: {
+        hours: rawData.metrics.weeklyHoursSaved || rawData.weeklyHoursSaved,
+        cost: rawData.metrics.weeklyCostSaved || (rawData.weeklyHoursSaved * 150)
+      },
+      yearlySavings: {
+        hours: rawData.metrics.yearlyHoursSaved || (rawData.weeklyHoursSaved * 52),
+        cost: rawData.metrics.yearlyCostSaved || rawData.yearlyCostSaved
+      },
+      roi: {
+        implementationCost: rawData.implementationCost || 5000,
+        breakEvenWeeks: rawData.metrics.breakEvenWeeks || 4,
+        yearOneROI: rawData.metrics.yearOneROI || Math.round(((rawData.yearlyCostSaved - 5000) / 5000) * 100)
+      }
+    }
+  };
+
+  const processingTime = Date.now() - startTime;
+
+  // Store the data
+  dataStore.set(id, visualizationData);
+
+  return {
+    success: true,
+    data: visualizationData,
+    processingTime
+  };
+}
+
 // Helper function to process SPAIK data (supports multiple formats)
 function processSpaikData(rawData) {
   const startTime = Date.now();
   
-  // Check if this is the new simplified format
+  // Check if this is pre-calculated results format
+  if (rawData.success !== undefined && rawData.solutionType && rawData.solutionTitle && rawData.metrics) {
+    return processPreCalculatedData(rawData);
+  }
+  
+  // Check if this is the simplified format
   if (rawData.processName && rawData.currentTime && rawData.futureTime) {
     return processSimplifiedSpaikData(rawData);
   }
