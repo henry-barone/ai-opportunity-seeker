@@ -2,29 +2,38 @@
   "version": 2,
   "builds": [
     {
-      "src": "production-start.cjs",
+      "src": "api/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/health",
-      "dest": "production-start.cjs"
+      "dest": "/api/index.js"
     },
     {
       "src": "/webhook/(.*)",
-      "dest": "production-start.cjs"
+      "dest": "/api/index.js"
     },
     {
       "src": "/api/(.*)",
-      "dest": "production-start.cjs"
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/",
+      "dest": "/api/index.js"
     },
     {
       "src": "/(.*)",
-      "dest": "production-start.cjs"
+      "dest": "/api/index.js"
     }
   ],
   "env": {
     "NODE_ENV": "production"
+  },
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30
+    }
   }
 }
