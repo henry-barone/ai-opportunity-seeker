@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { VisualizationDisplay } from '../components/VisualizationDisplay';
+import { EnhancedVisualizationDisplay } from '../components/EnhancedVisualizationDisplay';
 import { Loader2, AlertCircle } from 'lucide-react';
 
 interface VisualizationData {
@@ -155,7 +155,7 @@ export function VisualizationView() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto py-8">
-        <VisualizationDisplay data={data} />
+        <EnhancedVisualizationDisplay data={data} />
       </div>
     </div>
   );
