@@ -10,6 +10,7 @@ import { TestVisualization } from "./components/TestVisualization";
 import { VisualizationView } from "./pages/VisualizationView";
 import { VisualizationTest } from "./pages/VisualizationTest";
 import { VisualizationDemo } from "./pages/VisualizationDemo";
+import { ApiTest } from "./pages/ApiTest";
 import "./utils/console-webhook-test";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/visualization/:id" element={<VisualizationView />} />
           <Route path="/visualization-test" element={<VisualizationTest />} />
           <Route path="/visualization-demo" element={<VisualizationDemo />} />
+          <Route path="/api-test" element={<ApiTest />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

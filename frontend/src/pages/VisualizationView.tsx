@@ -82,8 +82,9 @@ export function VisualizationView() {
         return;
       }
 
-      // If no localStorage data, try to fetch from API
-      const response = await fetch(`/api/visualization-data/${visualizationId}`);
+      // If no localStorage data, try to fetch from Vercel API
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://ai-opportunity-seeker.vercel.app';
+      const response = await fetch(`${apiUrl}/api/visualization-data/${visualizationId}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch visualization data: ${response.status}`);
       }
