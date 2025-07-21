@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "production-start.cjs",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/health",
+      "dest": "production-start.cjs"
+    },
+    {
+      "src": "/webhook/(.*)",
+      "dest": "production-start.cjs"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "production-start.cjs"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "production-start.cjs"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

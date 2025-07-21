@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
+    "start": "node production-start.cjs",
     "webhook:start": "node server.cjs",
     "webhook:test": "node test-webhook.cjs",
     "webhook:test-full": "node scripts/webhook-tester.js",
