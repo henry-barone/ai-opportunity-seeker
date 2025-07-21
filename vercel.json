@@ -1,16 +1,6 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "frontend/server.cjs",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/frontend/server.cjs"
-    }
-  ],
-  "outputDirectory": "frontend"
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api" }
+  ]
 }
