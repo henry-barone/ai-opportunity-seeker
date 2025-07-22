@@ -18,6 +18,8 @@ import "./utils/notificationTrigger";
 import "./utils/webhookBridge";
 import "./utils/webhookTester";
 import "./utils/directNotificationTrigger";
+import "./utils/universalNotificationSystem";
+import "./utils/webhookSimulator";
 
 const queryClient = new QueryClient();
 

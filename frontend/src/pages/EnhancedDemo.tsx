@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Zap, Eye, Bell, TrendingUp, Target, TestTube, MessageCircle } from 'lucide-react';
 import { testWebhookIntegration, testSimplifiedWebhook } from '../utils/webhookTester';
 import { testWebhookWithDirectNotification, simulateChatExit } from '../utils/directNotificationTrigger';
+import universalNotificationSystem from '../utils/universalNotificationSystem';
 
 export function EnhancedDemo() {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,23 +49,43 @@ export function EnhancedDemo() {
     }
   };
 
-  const handleChatExitSimulation = async () => {
+  const handleUniversalTest = async () => {
     setIsLoading(true);
     setTestResults([]);
     
     try {
-      setTestResults(prev => [...prev, '🎯 Simulating complete chat exit scenario...']);
-      setTestResults(prev => [...prev, '💬 User exits Voiceflow chat']);
-      setTestResults(prev => [...prev, '⏳ Processing webhook data...']);
+      setTestResults(prev => [...prev, '🎯 Starting Universal Notification Test...']);
+      setTestResults(prev => [...prev, '🌐 Environment: ' + (window.location.hostname === 'localhost' ? 'Localhost' : 'Production')]);
+      setTestResults(prev => [...prev, '⏳ Sending webhook data...']);
       
-      const visualizationId = await testWebhookWithDirectNotification();
+      const visualizationId = await universalNotificationSystem.testWebhookIntegration();
       setTestResults(prev => [...prev, `✅ Webhook successful! ID: ${visualizationId}`]);
       setTestResults(prev => [...prev, `📱 Notification popup should appear now!`]);
       setTestResults(prev => [...prev, `🔗 Click "View Full Analysis" to see enhanced visualization`]);
       
+      // Show system status
+      const status = universalNotificationSystem.getStatus();
+      setTestResults(prev => [...prev, `📊 System Status: ${JSON.stringify(status, null, 2)}`]);
+      
     } catch (error) {
-      console.error('Chat exit simulation failed:', error);
-      setTestResults(prev => [...prev, `❌ Simulation failed: ${error}`]);
+      console.error('Universal test failed:', error);
+      setTestResults(prev => [...prev, `❌ Test failed: ${error}`]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleManualNotification = () => {
+    setIsLoading(true);
+    setTestResults([]);
+    
+    try {
+      setTestResults(prev => [...prev, '📱 Triggering manual notification...']);
+      const id = universalNotificationSystem.triggerManualNotification();
+      setTestResults(prev => [...prev, `✅ Manual notification triggered! ID: ${id}`]);
+      setTestResults(prev => [...prev, `👀 Watch for popup in top-right corner`]);
+    } catch (error) {
+      setTestResults(prev => [...prev, `❌ Manual trigger failed: ${error}`]);
     } finally {
       setIsLoading(false);
     }
@@ -107,37 +128,46 @@ export function EnhancedDemo() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {/* Chat Exit Simulation - Main Test */}
+          {/* Universal Test - Works on localhost and production */}
           <Card className="border-2 border-green-200 bg-green-50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageCircle className="h-5 w-5 text-green-600" />
-                Complete Chat Exit Test
+                Universal Integration Test
               </CardTitle>
               <CardDescription>
-                🎯 Simulate the real user journey: chat → webhook → popup notification
+                🎯 Works on localhost AND production: webhook → popup → visualization
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Button 
-                onClick={handleChatExitSimulation}
+                onClick={handleUniversalTest}
                 disabled={isLoading}
-                className="w-full bg-green-600 hover:bg-green-700"
+                className="w-full bg-green-600 hover:bg-green-700 mb-2"
               >
                 {isLoading ? (
                   <>
                     <Zap className="h-4 w-4 mr-2 animate-spin" />
-                    Running Complete Test...
+                    Running Universal Test...
                   </>
                 ) : (
                   <>
                     <MessageCircle className="h-4 w-4 mr-2" />
-                    Simulate Chat Exit
+                    Test Complete Flow
                   </>
                 )}
               </Button>
+              <Button 
+                onClick={handleManualNotification}
+                disabled={isLoading}
+                variant="outline"
+                className="w-full"
+              >
+                <Bell className="h-4 w-4 mr-2" />
+                Manual Popup Test
+              </Button>
               <p className="text-sm text-gray-600 mt-2 font-medium">
-                ⭐ Main test - simulates user leaving Voiceflow chat
+                ⭐ Main test - works everywhere!
               </p>
             </CardContent>
           </Card>
@@ -302,11 +332,12 @@ export function EnhancedDemo() {
 
         {/* Instructions */}
         <div className="mt-8 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-6 border border-blue-200">
-          <h3 className="font-semibold text-blue-900 mb-3">🎯 Complete Integration Test Guide</h3>
+          <h3 className="font-semibold text-blue-900 mb-3">🌐 Universal Integration Test Guide</h3>
           <div className="bg-white rounded-lg p-4 mb-4">
-            <h4 className="font-medium text-green-800 mb-2">⭐ Main Test - "Simulate Chat Exit"</h4>
+            <h4 className="font-medium text-green-800 mb-2">⭐ Main Test - "Test Complete Flow"</h4>
             <ol className="list-decimal list-inside space-y-1 text-sm text-green-700">
-              <li>Click the green "Simulate Chat Exit" button</li>
+              <li>Click the green "Test Complete Flow" button</li>
+              <li>System auto-detects your environment (localhost/production)</li>
               <li>Watch the test results appear in real-time</li>
               <li>A notification popup will appear in the top-right corner</li>
               <li>Click "View Full Analysis" to open the enhanced visualization</li>

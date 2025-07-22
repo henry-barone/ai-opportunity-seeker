@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import webhookBridge from '../utils/webhookBridge';
+import universalNotificationSystem from '../utils/universalNotificationSystem';
 
 interface NotificationData {
   visualizationId: string;
@@ -43,16 +43,17 @@ export function useNotificationSystem() {
       });
     };
 
-    // Listen for custom events from webhook bridge
+    // Listen for custom events from universal notification system
     window.addEventListener('newVisualization', handleNewVisualization as EventListener);
 
-    // Initialize webhook bridge (this starts automatic polling)
-    console.log('[NotificationSystem] Initializing webhook bridge...');
-    const status = webhookBridge.getStatus();
-    console.log('[NotificationSystem] Webhook bridge status:', status);
+    // Initialize universal notification system
+    console.log('[NotificationSystem] Initializing universal notification system...');
+    universalNotificationSystem.initialize();
+    const status = universalNotificationSystem.getStatus();
+    console.log('[NotificationSystem] Universal system status:', status);
 
     // Force an immediate check
-    webhookBridge.forceCheck();
+    universalNotificationSystem.forceCheck();
 
     return () => {
       window.removeEventListener('newVisualization', handleNewVisualization as EventListener);
