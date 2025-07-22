@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/Dashboard";
 import { DynamicResultsPage } from "./components/DynamicResultsPage";
 import { TestVisualization } from "./components/TestVisualization";
 import { VisualizationView } from "./pages/VisualizationView";
@@ -35,6 +36,7 @@ function AppContent() {
     <>
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/dashboard/:id" element={<Dashboard />} />
         <Route path="/results" element={<DynamicResultsPage />} />
         <Route path="/test" element={<TestVisualization />} />
         <Route path="/visualization/:id" element={<VisualizationView />} />

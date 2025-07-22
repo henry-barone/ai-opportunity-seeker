@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Test</title>
+</head>
+<body>
+    <h1>Dashboard Test Links</h1>
+    
+    <h2>Test Dashboard URL:</h2>
+    <p><a href="http://localhost:5173/dashboard/test?d=eyJpZCI6InRlc3QiLCJob3Vyc1NhdmVkIjoyMCwibW9udGhseVNhdmluZ3MiOjEyMDAwLCJyZWNvbW1lbmRhdGlvbiI6IlRlc3QgQXV0b21hdGlvbiJ9" target="_blank">
+        Test Dashboard - €12,000/month savings
+    </a></p>
+    
+    <h2>Example Production URL:</h2>
+    <p><a href="http://localhost:5173/dashboard/vis_123456?d=eyJpZCI6InZpc18xMjM0NTYiLCJob3Vyc1NhdmVkIjoxNiwibW9udGhseVNhdmluZ3MiOjk2MDAsInJlY29tbWVuZGF0aW9uIjoiSW52b2ljZSBQcm9jZXNzaW5nIEF1dG9tYXRpb24ifQ==" target="_blank">
+        Example Dashboard - €9,600/month savings
+    </a></p>
+    
+    <h2>Error Handling Test:</h2>
+    <p><a href="http://localhost:5173/dashboard/invalid?d=invalid-data" target="_blank">
+        Invalid Data Test
+    </a></p>
+    
+    <h2>Base64 Decoder Test:</h2>
+    <div>
+        <h3>Test Data:</h3>
+        <pre>eyJpZCI6InRlc3QiLCJob3Vyc1NhdmVkIjoyMCwibW9udGhseVNhdmluZ3MiOjEyMDAwLCJyZWNvbW1lbmRhdGlvbiI6IlRlc3QgQXV0b21hdGlvbiJ9</pre>
+        
+        <h3>Decodes to:</h3>
+        <pre>{"id":"test","hoursSaved":20,"monthlySavings":12000,"recommendation":"Test Automation"}</pre>
+        
+        <h3>Example Data:</h3>
+        <pre>eyJpZCI6InZpc18xMjM0NTYiLCJob3Vyc1NhdmVkIjoxNiwibW9udGhseVNhdmluZ3MiOjk2MDAsInJlY29tbWVuZGF0aW9uIjoiSW52b2ljZSBQcm9jZXNzaW5nIEF1dG9tYXRpb24ifQ==</pre>
+        
+        <h3>Decodes to:</h3>
+        <pre>{"id":"vis_123456","hoursSaved":16,"monthlySavings":9600,"recommendation":"Invoice Processing Automation"}</pre>
+    </div>
+</body>
+</html>
